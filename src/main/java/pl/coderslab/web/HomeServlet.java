@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Do not change servlet address !!!
- */
 @WebServlet("")
 public class HomeServlet extends HttpServlet {
 
