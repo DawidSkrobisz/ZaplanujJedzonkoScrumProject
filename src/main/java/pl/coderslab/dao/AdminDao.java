@@ -66,27 +66,28 @@ public class AdminDao {
         return adminList;
     }
 
-    public Book create(Book book) {
+    public Admin create(Admin admin) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement insertStm = connection.prepareStatement(CREATE_ADMIN_QUERY,
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
-            insertStm.setString(1, book.getTitle());
-            insertStm.setString(2, book.getAuthor());
-            insertStm.setString(3, book.getIsbn());
+            insertStm.setString(1, admin.getFirstName());
+            insertStm.setString(2, admin.getLastName());
+            insertStm.setString(3, admin.getEmail());
+            insertStm.setString(3, admin.getPassword());
+            insertStm.setInt(3, admin.getSuperadmin());
+            insertStm.setInt(3, admin.getEnable());
             int result = insertStm.executeUpdate();
 
             if (result != 1) {
                 throw new RuntimeException("Execute update returned " + result);
             }
-
             try (ResultSet generatedKeys = insertStm.getGeneratedKeys()) {
                 if (generatedKeys.first()) {
-                    book.setId(generatedKeys.getInt(1));
-                    return book;
+                    admin.setId(generatedKeys.getInt(1));
+                    return admin;
                 } else {
                     throw new RuntimeException("Generated key was not found");
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
