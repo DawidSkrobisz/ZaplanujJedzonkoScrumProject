@@ -6,10 +6,7 @@ import pl.coderslab.model.Admin;
 import pl.coderslab.model.Plan;
 import pl.coderslab.utils.DbUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,39 +39,33 @@ public class PlanDao {
         return plan;
     }
 
-    public List<Admin> findAll() {
-        List<Admin> adminList = new ArrayList<>();
+    public List<Plan> findAll() {
+        List<Plan> planList = new ArrayList<>();
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_ADMINS_QUERY);
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_PLAN_QUERY);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                Admin admintoAdd = new Admin();
-                admintoAdd.setId(resultSet.getInt("id"));
-                admintoAdd.setFirstName(resultSet.getString("firstName"));
-                admintoAdd.setLastName(resultSet.getString("lastName"));
-                admintoAdd.setEmail(resultSet.getString("email"));
-                admintoAdd.setPassword(resultSet.getString("password"));
-                admintoAdd.setSuperadmin(resultSet.getInt("superadmin"));
-                admintoAdd.setEnable(resultSet.getInt("enable"));
-                adminList.add(admintoAdd);
+                Plan plantoAdd = new Plan();
+                plantoAdd.setId(resultSet.getInt("id"));
+                plantoAdd.setName(resultSet.getString("name"));
+                plantoAdd.setDescription(resultSet.getString("description"));
+                plantoAdd.setCreated(resultSet.getDate("created"));
+                planList.add(plantoAdd);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return adminList;
+        return planList;
     }
 
-    public Admin create(Admin admin) {
+    public Plan create(Plan plan) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement insertStm = connection.prepareStatement(CREATE_ADMIN_QUERY,
+             PreparedStatement insertStm = connection.prepareStatement(CREATE_PLAN_QUERY,
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
-            insertStm.setString(1, admin.getFirstName());
-            insertStm.setString(2, admin.getLastName());
-            insertStm.setString(3, admin.getEmail());
-            insertStm.setString(4, BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt()));
-            insertStm.setInt(5, admin.getSuperadmin());
-            insertStm.setInt(6, admin.getEnable());
+            insertStm.setString(1, plan.getName());
+            insertStm.setString(2, plan.getDescription());
+            insertStm.setDate(3, (Date) plan.getCreated());
             int result = insertStm.executeUpdate();
 
             if (result != 1) {
@@ -82,8 +73,8 @@ public class PlanDao {
             }
             try (ResultSet generatedKeys = insertStm.getGeneratedKeys()) {
                 if (generatedKeys.first()) {
-                    admin.setId(generatedKeys.getInt(1));
-                    return admin;
+                    plan.setId(generatedKeys.getInt(1));
+                    return plan;
                 } else {
                     throw new RuntimeException("Generated key was not found");
                 }
@@ -94,31 +85,28 @@ public class PlanDao {
         return null;
     }
 
-    public void delete(Integer adminId) {
+    public void delete(Integer planId) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_ADMIN_QUERY)) {
-            statement.setInt(1, adminId);
+             PreparedStatement statement = connection.prepareStatement(DELETE_PLAN_QUERY)) {
+            statement.setInt(1, planId);
             statement.executeUpdate();
 
             boolean deleted = statement.execute();
             if (!deleted) {
-                throw new NotFoundException("Admin not found");
+                throw new NotFoundException("Plan not found");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void update(Admin admin) {
+    public void update(Plan plan) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_ADMIN_QUERY)) {
-            statement.setInt(1, admin.getId());
-            statement.setString(2, admin.getFirstName());
-            statement.setString(3, admin.getLastName());
-            statement.setString(4, admin.getEmail());
-            statement.setString(5, BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt()));
-            statement.setInt(6, admin.getSuperadmin());
-            statement.setInt(7, admin.getEnable());
+             PreparedStatement statement = connection.prepareStatement(UPDATE_PLAN_QUERY)) {
+            statement.setInt(1, plan.getId());
+            statement.setString(2, plan.getName());
+            statement.setString(3, plan.getDescription());
+            statement.setDate(4, (Date) plan.getCreated());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
