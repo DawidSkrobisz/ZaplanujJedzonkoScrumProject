@@ -117,7 +117,7 @@ public class AdminDao {
             statement.setString(2, admin.getFirstName());
             statement.setString(3, admin.getLastName());
             statement.setString(4, admin.getEmail());
-            statement.setString(5, admin.getPassword());
+            statement.setString(5, BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt()));
             statement.setInt(6, admin.getSuperadmin());
             statement.setInt(7, admin.getEnable());
             statement.executeUpdate();
