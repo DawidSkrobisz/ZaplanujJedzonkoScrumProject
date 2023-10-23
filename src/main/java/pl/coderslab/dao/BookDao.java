@@ -18,13 +18,7 @@ public class BookDao {
     private static final String FIND_ALL_BOOKS_QUERY = "SELECT * FROM book;";
     private static final String READ_BOOK_QUERY = "SELECT * from book where id = ?;";
     private static final String UPDATE_BOOK_QUERY = "UPDATE	book SET title = ? , author = ?, isbn = ? WHERE	id = ?;";
-
-    /**
-     * Get book by id
-     *
-     * @param bookId
-     * @return
-     */
+    
     public Book read(Integer bookId) {
         Book book = new Book();
         try (Connection connection = DbUtil.getConnection();
