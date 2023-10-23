@@ -1,6 +1,7 @@
 package pl.coderslab.dao;
 
 import pl.coderslab.exception.NotFoundException;
+import pl.coderslab.model.Admin;
 import pl.coderslab.model.Book;
 import pl.coderslab.utils.DbUtil;
 
@@ -19,47 +20,50 @@ public class AdminDao {
     private static final String READ_ADMIN_QUERY = "SELECT * from admins where id = ?;";
     private static final String UPDATE_ADMIN_QUERY = "UPDATE admin SET firstName = ? , lastName = ?, email = ?, password = ?, superadmin = ?, enable = ? WHERE	id = ?;";
 
-    public Book read(Integer bookId) {
-        Book book = new Book();
+    public Admin read(Integer bookId) {
+        Admin admin = new Admin();
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(READ_ADMIN_QUERY)
         ) {
             statement.setInt(1, bookId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    book.setId(resultSet.getInt("id"));
-                    book.setTitle(resultSet.getString("title"));
-                    book.setAuthor(resultSet.getString("author"));
-                    book.setIsbn(resultSet.getString("isbn"));
+                    admin.setId(resultSet.getInt("id"));
+                    admin.setFirstName(resultSet.getString("firstName"));
+                    admin.setLastName(resultSet.getString("lastName"));
+                    admin.setEmail(resultSet.getString("email"));
+                    admin.setPassword(resultSet.getString("password"));
+                    admin.setSuperadmin(resultSet.getInt("superadmin"));
+                    admin.setEnable(resultSet.getInt("enable"));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return book;
-
+        return admin;
     }
 
-    public List<Book> findAll() {
-        List<Book> bookList = new ArrayList<>();
+    public List<Admin> findAll() {
+        List<Admin> adminList = new ArrayList<>();
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ADMINS_QUERY);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                Book bookToAdd = new Book();
-                bookToAdd.setId(resultSet.getInt("id"));
-                bookToAdd.setTitle(resultSet.getString("title"));
-                bookToAdd.setAuthor(resultSet.getString("author"));
-                bookToAdd.setIsbn(resultSet.getString("isbn"));
-                bookList.add(bookToAdd);
+                Admin admintoAdd = new Admin();
+                admintoAdd.setId(resultSet.getInt("id"));
+                admintoAdd.setFirstName(resultSet.getString("firstName"));
+                admintoAdd.setLastName(resultSet.getString("lastName"));
+                admintoAdd.setEmail(resultSet.getString("email"));
+                admintoAdd.setPassword(resultSet.getString("password"));
+                admintoAdd.setSuperadmin(resultSet.getInt("superadmin"));
+                admintoAdd.setEnable(resultSet.getInt("enable"));
+                adminList.add(admintoAdd);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return bookList;
-
+        return adminList;
     }
 
     public Book create(Book book) {
