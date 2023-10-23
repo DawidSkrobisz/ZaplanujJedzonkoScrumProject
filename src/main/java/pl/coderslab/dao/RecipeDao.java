@@ -1,7 +1,6 @@
 package pl.coderslab.dao;
 
 import pl.coderslab.exception.NotFoundException;
-import pl.coderslab.model.Plan;
 import pl.coderslab.model.Recipe;
 import pl.coderslab.utils.DbUtil;
 
@@ -64,13 +63,17 @@ public class RecipeDao {
         return recipeList;
     }
 
-    public Plan create(Plan plan) {
+    public Recipe create(Recipe recipe) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement insertStm = connection.prepareStatement(CREATE_PLAN_QUERY,
+             PreparedStatement insertStm = connection.prepareStatement(CREATE_RECIPE_QUERY,
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
-            insertStm.setString(1, plan.getName());
-            insertStm.setString(2, plan.getDescription());
-            insertStm.setDate(3, (Date) plan.getCreated());
+            insertStm.setString(1, recipe.getName());
+            insertStm.setString(2, recipe.getIngredients());
+            insertStm.setString(3, recipe.getDescription());
+            insertStm.setDate(4, (Date) recipe.getCreated());
+            insertStm.setDate(5, (Date) recipe.getUpdated());
+            insertStm.setInt(6,recipe.getPreparation_time());
+            insertStm.setString(7, recipe.getPreparation());
             int result = insertStm.executeUpdate();
 
             if (result != 1) {
@@ -78,8 +81,8 @@ public class RecipeDao {
             }
             try (ResultSet generatedKeys = insertStm.getGeneratedKeys()) {
                 if (generatedKeys.first()) {
-                    plan.setId(generatedKeys.getInt(1));
-                    return plan;
+                    recipe.setId(generatedKeys.getInt(1));
+                    return recipe;
                 } else {
                     throw new RuntimeException("Generated key was not found");
                 }
@@ -90,10 +93,10 @@ public class RecipeDao {
         return null;
     }
 
-    public void delete(Integer planId) {
+    public void delete(Integer recipeId) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_PLAN_QUERY)) {
-            statement.setInt(1, planId);
+             PreparedStatement statement = connection.prepareStatement(DELETE_RECIPE_QUERY)) {
+            statement.setInt(1, recipeId);
             statement.executeUpdate();
 
             boolean deleted = statement.execute();
@@ -105,13 +108,16 @@ public class RecipeDao {
         }
     }
 
-    public void update(Plan plan) {
+    public void update(Recipe recipe) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_PLAN_QUERY)) {
-            statement.setInt(1, plan.getId());
-            statement.setString(2, plan.getName());
-            statement.setString(3, plan.getDescription());
-            statement.setDate(4, (Date) plan.getCreated());
+             PreparedStatement statement = connection.prepareStatement(UPDATE_RECIPE_QUERY)) {
+            statement.setString(1, recipe.getName());
+            statement.setString(2, recipe.getIngredients());
+            statement.setString(3, recipe.getDescription());
+            statement.setDate(4, (Date) recipe.getCreated());
+            statement.setDate(5, (Date) recipe.getUpdated());
+            statement.setInt(6,recipe.getPreparation_time());
+            statement.setString(7, recipe.getPreparation());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
