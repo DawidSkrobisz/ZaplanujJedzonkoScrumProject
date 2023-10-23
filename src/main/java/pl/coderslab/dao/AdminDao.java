@@ -11,18 +11,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookDao {
-    // ZAPYTANIA SQL
-    private static final String CREATE_BOOK_QUERY = "INSERT INTO book(title,author,isbn) VALUES (?,?,?);";
-    private static final String DELETE_BOOK_QUERY = "DELETE FROM book where id = ?;";
-    private static final String FIND_ALL_BOOKS_QUERY = "SELECT * FROM book;";
-    private static final String READ_BOOK_QUERY = "SELECT * from book where id = ?;";
-    private static final String UPDATE_BOOK_QUERY = "UPDATE	book SET title = ? , author = ?, isbn = ? WHERE	id = ?;";
+public class AdminDao {
+
+    private static final String CREATE_ADMIN_QUERY = "INSERT INTO admins(firstName, lastName, email, password, superadmin, enable) VALUES (?,?,?,?,?,?);";
+    private static final String DELETE_ADMIN_QUERY = "DELETE FROM admins where id = ?;";
+    private static final String FIND_ALL_ADMINS_QUERY = "SELECT * FROM admins;";
+    private static final String READ_ADMIN_QUERY = "SELECT * from admins where id = ?;";
+    private static final String UPDATE_ADMIN_QUERY = "UPDATE admin SET firstName = ? , lastName = ?, email = ?, password = ?, superadmin = ?, enable = ? WHERE	id = ?;";
 
     public Book read(Integer bookId) {
         Book book = new Book();
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(READ_BOOK_QUERY)
+             PreparedStatement statement = connection.prepareStatement(READ_ADMIN_QUERY)
         ) {
             statement.setInt(1, bookId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -40,15 +40,10 @@ public class BookDao {
 
     }
 
-    /**
-     * Return all books
-     *
-     * @return
-     */
     public List<Book> findAll() {
         List<Book> bookList = new ArrayList<>();
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS_QUERY);
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_ADMINS_QUERY);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -67,15 +62,9 @@ public class BookDao {
 
     }
 
-    /**
-     * Create book
-     *
-     * @param book
-     * @return
-     */
     public Book create(Book book) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement insertStm = connection.prepareStatement(CREATE_BOOK_QUERY,
+             PreparedStatement insertStm = connection.prepareStatement(CREATE_ADMIN_QUERY,
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             insertStm.setString(1, book.getTitle());
             insertStm.setString(2, book.getAuthor());
@@ -102,14 +91,9 @@ public class BookDao {
     }
 
 
-    /**
-     * Remove book by id
-     *
-     * @param bookId
-     */
     public void delete(Integer bookId) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_BOOK_QUERY)) {
+             PreparedStatement statement = connection.prepareStatement(DELETE_ADMIN_QUERY)) {
             statement.setInt(1, bookId);
             statement.executeUpdate();
 
@@ -123,14 +107,9 @@ public class BookDao {
     }
 
 
-    /**
-     * Update book
-     *
-     * @param book
-     */
     public void update(Book book) {
         try (Connection connection = DbUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK_QUERY)) {
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ADMIN_QUERY)) {
             statement.setInt(4, book.getId());
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getAuthor());
@@ -140,7 +119,5 @@ public class BookDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }
