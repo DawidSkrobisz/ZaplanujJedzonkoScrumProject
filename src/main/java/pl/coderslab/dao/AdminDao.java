@@ -2,7 +2,6 @@ package pl.coderslab.dao;
 
 import pl.coderslab.exception.NotFoundException;
 import pl.coderslab.model.Admin;
-import pl.coderslab.model.Book;
 import pl.coderslab.utils.DbUtil;
 
 import java.sql.Connection;
@@ -20,12 +19,12 @@ public class AdminDao {
     private static final String READ_ADMIN_QUERY = "SELECT * from admins where id = ?;";
     private static final String UPDATE_ADMIN_QUERY = "UPDATE admin SET firstName = ? , lastName = ?, email = ?, password = ?, superadmin = ?, enable = ? WHERE	id = ?;";
 
-    public Admin read(Integer bookId) {
+    public Admin read(Integer adminId) {
         Admin admin = new Admin();
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(READ_ADMIN_QUERY)
         ) {
-            statement.setInt(1, bookId);
+            statement.setInt(1, adminId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     admin.setId(resultSet.getInt("id"));
@@ -95,31 +94,31 @@ public class AdminDao {
         return null;
     }
 
-
-    public void delete(Integer bookId) {
+    public void delete(Integer adminId) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_ADMIN_QUERY)) {
-            statement.setInt(1, bookId);
+            statement.setInt(1, adminId);
             statement.executeUpdate();
 
             boolean deleted = statement.execute();
             if (!deleted) {
-                throw new NotFoundException("Product not found");
+                throw new NotFoundException("Admin not found");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    public void update(Book book) {
+    public void update(Admin admin) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ADMIN_QUERY)) {
-            statement.setInt(4, book.getId());
-            statement.setString(1, book.getTitle());
-            statement.setString(2, book.getAuthor());
-            statement.setString(3, book.getIsbn());
-
+            statement.setInt(4, admin.getId());
+            statement.setString(1, admin.getFirstName());
+            statement.setString(2, admin.getLastName());
+            statement.setString(3, admin.getEmail());
+            statement.setString(3, admin.getPassword());
+            statement.setInt(3, admin.getSuperadmin());
+            statement.setInt(3, admin.getEnable());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

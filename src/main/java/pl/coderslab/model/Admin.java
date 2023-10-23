@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 public class Admin {
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
