@@ -1,5 +1,6 @@
 package pl.coderslab.dao;
 
+import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.exception.NotFoundException;
 import pl.coderslab.model.Admin;
 import pl.coderslab.utils.DbUtil;
@@ -72,9 +73,9 @@ public class AdminDao {
             insertStm.setString(1, admin.getFirstName());
             insertStm.setString(2, admin.getLastName());
             insertStm.setString(3, admin.getEmail());
-            insertStm.setString(3, admin.getPassword());
-            insertStm.setInt(3, admin.getSuperadmin());
-            insertStm.setInt(3, admin.getEnable());
+            insertStm.setString(4, BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt()));
+            insertStm.setInt(5, admin.getSuperadmin());
+            insertStm.setInt(6, admin.getEnable());
             int result = insertStm.executeUpdate();
 
             if (result != 1) {
@@ -112,13 +113,13 @@ public class AdminDao {
     public void update(Admin admin) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ADMIN_QUERY)) {
-            statement.setInt(4, admin.getId());
-            statement.setString(1, admin.getFirstName());
-            statement.setString(2, admin.getLastName());
-            statement.setString(3, admin.getEmail());
-            statement.setString(3, admin.getPassword());
-            statement.setInt(3, admin.getSuperadmin());
-            statement.setInt(3, admin.getEnable());
+            statement.setInt(1, admin.getId());
+            statement.setString(2, admin.getFirstName());
+            statement.setString(3, admin.getLastName());
+            statement.setString(4, admin.getEmail());
+            statement.setString(5, admin.getPassword());
+            statement.setInt(6, admin.getSuperadmin());
+            statement.setInt(7, admin.getEnable());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
