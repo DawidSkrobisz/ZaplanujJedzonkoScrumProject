@@ -66,33 +66,21 @@ public class AdminDao {
         return adminList;
     }
 
-    public Admin create(Admin admin) {
-        try (Connection connection = DbUtil.getConnection();
-             PreparedStatement insertStm = connection.prepareStatement(CREATE_ADMIN_QUERY,
-                     PreparedStatement.RETURN_GENERATED_KEYS)) {
+    public void create(Admin admin) {
+        try (Connection connection = DbUtil.getConnection()) {
+            PreparedStatement insertStm = connection.prepareStatement(CREATE_ADMIN_QUERY);
             insertStm.setString(1, admin.getFirstName());
             insertStm.setString(2, admin.getLastName());
             insertStm.setString(3, admin.getEmail());
             insertStm.setString(4, BCrypt.hashpw(admin.getPassword(), BCrypt.gensalt()));
             insertStm.setInt(5, admin.getSuperadmin());
             insertStm.setInt(6, admin.getEnable());
-            int result = insertStm.executeUpdate();
+            insertStm.executeUpdate();
 
-            if (result != 1) {
-                throw new RuntimeException("Execute update returned " + result);
-            }
-            try (ResultSet generatedKeys = insertStm.getGeneratedKeys()) {
-                if (generatedKeys.first()) {
-                    admin.setId(generatedKeys.getInt(1));
-                    return admin;
-                } else {
-                    throw new RuntimeException("Generated key was not found");
-                }
-            }
-        } catch (Exception e) {
+                   } catch (SQLException e) {
             e.printStackTrace();
+
         }
-        return null;
     }
 
     public void delete(Integer adminId) {

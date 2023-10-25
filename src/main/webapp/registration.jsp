@@ -9,13 +9,13 @@
             <div class="container w-25">
                 <!-- fix action, method -->
                 <!-- add name attribute for all inputs -->
-                <form class="padding-small text-center">
+                <form class="padding-small text-center" method="post" action="${pageContext.request.contextPath}/register">
                     <h1 class="text-color-darker">Rejestracja</h1>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="podaj imię">
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="podaj imię">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="surname" name="surname" placeholder="podaj nazwisko">
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="podaj nazwisko">
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="email" name="email" placeholder="podaj email">
