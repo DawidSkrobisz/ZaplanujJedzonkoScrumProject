@@ -9,7 +9,7 @@
             <div class="carousel-item active">
                 <div class="container w-75 d-flex">
                     <div class="carousel-caption d-block">
-                        <h1>Loręźćżm ipsum dolor sit amet</h1>
+                        <h1> &lstrok; Loręźćżm ipsum dolor sit amet</h1>
                         <h3> consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
                             magna aliqua.</h3>
                     </div>
