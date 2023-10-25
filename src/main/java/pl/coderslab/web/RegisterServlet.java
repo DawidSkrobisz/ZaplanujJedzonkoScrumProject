@@ -23,8 +23,8 @@ public class RegisterServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        Integer superadmin = 0;
-        Integer enable = 1;
+        int superadmin = 0;
+        int enable = 1;
         Admin admin = new Admin(firstName, lastName, email, password, superadmin, enable);
         AdminDao adminDao = new AdminDao();
         admin.setFirstName(firstName);
@@ -34,6 +34,6 @@ public class RegisterServlet extends HttpServlet {
         admin.setSuperadmin(superadmin);
         admin.setEnable(enable);
         adminDao.create(admin);
-        response.sendRedirect(request.getContextPath() + "/register");
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 }
