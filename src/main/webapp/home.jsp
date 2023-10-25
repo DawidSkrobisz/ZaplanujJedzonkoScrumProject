@@ -1,30 +1,7 @@
 <%@ include file="header.jsp" %>
 
 <body>
-<header class="page-header">
-    <nav class="navbar navbar-expand-lg justify-content-around">
-        <a href="/" class="navbar-brand main-logo">
-            Zaplanuj <span>Jedzonko</span>
-        </a>
-        <ul class="nav nounderline text-uppercase">
-            <li class="nav-item ml-4">
-                <a class="nav-link color-header" href="login.html">logowanie</a>
-            </li>
-            <li class="nav-item ml-4">
-                <a class="nav-link color-header" href="registration.html">rejestracja</a>
-            </li>
-            <li class="nav-item ml-4">
-                <a class="nav-link" href="#about">o aplikacji</a>
-            </li>
-            <li class="nav-item ml-4">
-                <a class="nav-link disabled" href="recipes.html">Przepisy</a>
-            </li>
-            <li class="nav-item ml-4">
-                <a class="nav-link disabled" href="#contact">Kontakt</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+<%@ include file="headermenu.jsp" %>
 
 <section class="padding-large bg-light">
     <div id="carouselExampleControls" class="carousel slide main-slider" data-ride="carousel">
@@ -32,7 +9,7 @@
             <div class="carousel-item active">
                 <div class="container w-75 d-flex">
                     <div class="carousel-caption d-block">
-                        <h1>Lorem ipsum dolor sit amet</h1>
+                        <h1>Loręźćżm ipsum dolor sit amet</h1>
                         <h3> consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
                             magna aliqua.</h3>
                     </div>
