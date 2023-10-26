@@ -1,6 +1,5 @@
 package pl.coderslab.dao;
 
-import pl.coderslab.model.Admin;
 import pl.coderslab.model.DayName;
 import pl.coderslab.utils.DbUtil;
 
