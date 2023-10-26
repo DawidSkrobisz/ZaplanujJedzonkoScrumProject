@@ -1,5 +1,4 @@
 <%@ include file="header.jsp" %>
-
 <body>
 <%@ include file="headermenu.jsp" %>
 
@@ -32,7 +31,6 @@
         </div>
     </div>
 </section>
-
 <%@ include file="footer.jsp" %>
 </body>
 </html>
