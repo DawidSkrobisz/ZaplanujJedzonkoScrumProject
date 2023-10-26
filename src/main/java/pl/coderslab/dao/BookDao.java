@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookDao {
-    // ZAPYTANIA SQL
+
     private static final String CREATE_BOOK_QUERY = "INSERT INTO book(title,author,isbn) VALUES (?,?,?);";
     private static final String DELETE_BOOK_QUERY = "DELETE FROM book where id = ?;";
     private static final String FIND_ALL_BOOKS_QUERY = "SELECT * FROM book;";
@@ -40,11 +40,6 @@ public class BookDao {
 
     }
 
-    /**
-     * Return all books
-     *
-     * @return
-     */
     public List<Book> findAll() {
         List<Book> bookList = new ArrayList<>();
         try (Connection connection = DbUtil.getConnection();
@@ -67,12 +62,6 @@ public class BookDao {
 
     }
 
-    /**
-     * Create book
-     *
-     * @param book
-     * @return
-     */
     public Book create(Book book) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement insertStm = connection.prepareStatement(CREATE_BOOK_QUERY,
@@ -101,12 +90,6 @@ public class BookDao {
         return null;
     }
 
-
-    /**
-     * Remove book by id
-     *
-     * @param bookId
-     */
     public void delete(Integer bookId) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_BOOK_QUERY)) {
@@ -122,12 +105,6 @@ public class BookDao {
         }
     }
 
-
-    /**
-     * Update book
-     *
-     * @param book
-     */
     public void update(Book book) {
         try (Connection connection = DbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK_QUERY)) {
@@ -142,5 +119,4 @@ public class BookDao {
         }
 
     }
-
 }
