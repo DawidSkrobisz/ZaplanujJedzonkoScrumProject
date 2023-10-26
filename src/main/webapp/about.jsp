@@ -1,5 +1,4 @@
 <%@include file="header.jsp"%>
-
 <body>
 <%@ include file="headermenu.jsp" %>
 
